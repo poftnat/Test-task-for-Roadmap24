@@ -17,7 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mainController = LaunchScreenViewController()
         window?.rootViewController = mainController
         window?.makeKeyAndVisible()
-        
     }
     
 }

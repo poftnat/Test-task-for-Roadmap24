@@ -21,7 +21,7 @@ final class NetworkManager {
                     completion(episodes.episodes)
                 }
                 catch {
-                    print(error.localizedDescription)
+                    print(error)
                 }
             }
         }
@@ -40,7 +40,7 @@ final class NetworkManager {
                     completion(personages)
                 }
                 catch {
-                    print(error.localizedDescription)
+                    print(error)
                 }
             }
         }

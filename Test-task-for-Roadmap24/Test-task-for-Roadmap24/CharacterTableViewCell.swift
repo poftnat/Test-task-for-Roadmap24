@@ -7,18 +7,19 @@
 
 import UIKit
 
-class CharacterTableViewCell: UITableViewCell {
+final class CharacterTableViewCell: UITableViewCell {
     
     private lazy var informationTypeTextLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Roboto", size: 20)
-        label.textColor = .lightGray
+        label.font = UIFont(name: "Roboto", size: 16)
+        label.textColor = UIColor(red: 0.03, green: 0.12, blue: 0.20, alpha: 1.00)
         return label
     }()
     
     private lazy var informationTextLabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Roboto", size: 20)
+        label.font = UIFont(name: "Roboto", size: 14)
+        label.textColor = UIColor(red: 0.43, green: 0.47, blue: 0.55, alpha: 1.00)
         return label
     }()
     
@@ -39,18 +40,23 @@ class CharacterTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            informationTypeTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            informationTypeTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 2),
-            informationTypeTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
+            informationTypeTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            informationTypeTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            informationTypeTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            informationTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 2),
-            informationTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -2),
-            informationTextLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2)
+            informationTextLabel.topAnchor.constraint(equalTo: informationTypeTextLabel.bottomAnchor, constant: 4),
+            informationTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            informationTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
         ])
     }
     
     func configure(data: PairProperties) {
-        informationTextLabel.text = data.property
+        let localHelper = data.property
+        if localHelper == "" {
+            informationTextLabel.text = "unknown"
+        } else {
+            informationTextLabel.text = data.property
+        }
         informationTypeTextLabel.text = data.propertyType
     }
 }

@@ -23,6 +23,12 @@
 		4F4ABEA82B1373F9000D8766 /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4ABEA72B1373F9000D8766 /* LaunchScreenViewController.swift */; };
 		4F4ABEAC2B139D1E000D8766 /* PersonagesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4ABEAB2B139D1E000D8766 /* PersonagesSource.swift */; };
 		4F4ABEAE2B13B50D000D8766 /* CharacterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4ABEAD2B13B50D000D8766 /* CharacterTableViewCell.swift */; };
+		4F4ABEB22B169961000D8766 /* FavouritesUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4ABEB12B169961000D8766 /* FavouritesUserDefault.swift */; };
+		4F4ABEB42B17A4CC000D8766 /* NavBarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4ABEB32B17A4CC000D8766 /* NavBarExtension.swift */; };
+		4F4ABEB62B1CB88B000D8766 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F4ABEB52B1CB88B000D8766 /* Roboto-Regular.ttf */; };
+		4F4ABEB82B1CB89B000D8766 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F4ABEB72B1CB89B000D8766 /* Roboto-Bold.ttf */; };
+		4F4ABEBB2B1CC54E000D8766 /* Inter-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4F4ABEBA2B1CC54E000D8766 /* Inter-Regular.otf */; };
+		4F4ABEC12B1CDF03000D8766 /* Karla-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F4ABEC02B1CDF02000D8766 /* Karla-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +50,12 @@
 		4F4ABEA72B1373F9000D8766 /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		4F4ABEAB2B139D1E000D8766 /* PersonagesSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonagesSource.swift; sourceTree = "<group>"; };
 		4F4ABEAD2B13B50D000D8766 /* CharacterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCell.swift; sourceTree = "<group>"; };
+		4F4ABEB12B169961000D8766 /* FavouritesUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesUserDefault.swift; sourceTree = "<group>"; };
+		4F4ABEB32B17A4CC000D8766 /* NavBarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarExtension.swift; sourceTree = "<group>"; };
+		4F4ABEB52B1CB88B000D8766 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		4F4ABEB72B1CB89B000D8766 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		4F4ABEBA2B1CC54E000D8766 /* Inter-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.otf"; sourceTree = "<group>"; };
+		4F4ABEC02B1CDF02000D8766 /* Karla-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Karla-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,16 +97,30 @@
 				4F4ABE992B11FFFB000D8766 /* CharacterViewController.swift */,
 				4F4ABEAD2B13B50D000D8766 /* CharacterTableViewCell.swift */,
 				4F4ABE9B2B120017000D8766 /* FavouritesViewController.swift */,
+				4F4ABEB12B169961000D8766 /* FavouritesUserDefault.swift */,
 				4F4ABE9D2B1200B9000D8766 /* NetworkManager.swift */,
 				4F4ABEAB2B139D1E000D8766 /* PersonagesSource.swift */,
 				4F4ABEA12B1209AC000D8766 /* EpisodesSource.swift */,
+				4F4ABEB32B17A4CC000D8766 /* NavBarExtension.swift */,
 				4F4ABEA52B121B9E000D8766 /* ImagesExtension.swift */,
 				4F4ABE8B2B11FC6F000D8766 /* Main.storyboard */,
 				4F4ABE8E2B11FC70000D8766 /* Assets.xcassets */,
 				4F4ABE902B11FC70000D8766 /* LaunchScreen.storyboard */,
 				4F4ABE932B11FC70000D8766 /* Info.plist */,
+				4F4ABEB92B1CB8A3000D8766 /* Fonts */,
 			);
 			path = "Test-task-for-Roadmap24";
+			sourceTree = "<group>";
+		};
+		4F4ABEB92B1CB8A3000D8766 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4F4ABEB72B1CB89B000D8766 /* Roboto-Bold.ttf */,
+				4F4ABEB52B1CB88B000D8766 /* Roboto-Regular.ttf */,
+				4F4ABEBA2B1CC54E000D8766 /* Inter-Regular.otf */,
+				4F4ABEC02B1CDF02000D8766 /* Karla-Bold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,7 +182,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F4ABE922B11FC70000D8766 /* LaunchScreen.storyboard in Resources */,
+				4F4ABEBB2B1CC54E000D8766 /* Inter-Regular.otf in Resources */,
 				4F4ABE8F2B11FC70000D8766 /* Assets.xcassets in Resources */,
+				4F4ABEB82B1CB89B000D8766 /* Roboto-Bold.ttf in Resources */,
+				4F4ABEC12B1CDF03000D8766 /* Karla-Bold.ttf in Resources */,
+				4F4ABEB62B1CB88B000D8766 /* Roboto-Regular.ttf in Resources */,
 				4F4ABE8D2B11FC6F000D8766 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -174,9 +204,11 @@
 				4F4ABE9A2B11FFFB000D8766 /* CharacterViewController.swift in Sources */,
 				4F4ABEA42B1219A5000D8766 /* EpisodeCollectionViewCell.swift in Sources */,
 				4F4ABE862B11FC6F000D8766 /* AppDelegate.swift in Sources */,
+				4F4ABEB42B17A4CC000D8766 /* NavBarExtension.swift in Sources */,
 				4F4ABEAC2B139D1E000D8766 /* PersonagesSource.swift in Sources */,
 				4F4ABEA22B1209AC000D8766 /* EpisodesSource.swift in Sources */,
 				4F4ABEA02B120250000D8766 /* TabBarController.swift in Sources */,
+				4F4ABEB22B169961000D8766 /* FavouritesUserDefault.swift in Sources */,
 				4F4ABE9C2B120017000D8766 /* FavouritesViewController.swift in Sources */,
 				4F4ABE882B11FC6F000D8766 /* SceneDelegate.swift in Sources */,
 				4F4ABEA82B1373F9000D8766 /* LaunchScreenViewController.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LaunchScreenViewController: UIViewController {
+final class LaunchScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +21,11 @@ class LaunchScreenViewController: UIViewController {
         let loadingImageView = UIImageView()
         loadingImageView.image = UIImage(named: "Loading component")
         loadingImageView.translatesAutoresizingMaskIntoConstraints = false
+        loadingImageView.layer.shadowColor = CGColor(gray: 10, alpha: 0.5)
+        loadingImageView.layer.shadowOffset = .zero
+        loadingImageView.layer.shadowColor = UIColor.lightGray.cgColor
+        loadingImageView.layer.shadowRadius = 10
+        loadingImageView.layer.shadowOpacity = 1
         view.addSubview(loadingImageView)
         rotateView(targetView: loadingImageView, duration: 3)
         

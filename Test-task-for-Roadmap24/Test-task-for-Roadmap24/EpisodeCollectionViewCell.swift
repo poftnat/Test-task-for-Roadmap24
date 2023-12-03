@@ -3,16 +3,16 @@
 //  Test-task-for-Roadmap24
 //
 //  Created by Наталья Владимировна Пофтальная on 25.11.2023.
-//
 
 import UIKit
 
-class EpisodeCollectionViewCell: UICollectionViewCell {
+final class EpisodeCollectionViewCell: UICollectionViewCell {
     
     private lazy var characterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .green
+        imageView.image = UIImage(named: "logo-black 1")
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.tappedImage))
         imageView.addGestureRecognizer(tap)
@@ -23,7 +23,7 @@ class EpisodeCollectionViewCell: UICollectionViewCell {
     private lazy var nameTextLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.text = "Place name here"
+        label.font = UIFont(name: "Roboto-Regular", size: 20)
         return label
     }()
     
@@ -45,7 +45,7 @@ class EpisodeCollectionViewCell: UICollectionViewCell {
     private lazy var episodeTextLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = UIFont(name: "Inter", size: 16)
+        label.font = UIFont(name: "Inter-Regular", size: 16)
         label.textColor = UIColor(red: 0.19, green: 0.20, blue: 0.20, alpha: 1.00)
         return label
     }()
@@ -54,20 +54,15 @@ class EpisodeCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         button.layer.cornerRadius = 5
         button.clipsToBounds = true
-        let image = UIImage(named: "Heart")?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
-        button.setBackgroundImage(image, for: .normal)
-        button.isUserInteractionEnabled = true
-        let tap = UIGestureRecognizer()
-        button.addGestureRecognizer(tap)
-        button.addTarget(self, action: #selector(tappedMe(sender:)), for: .touchUpInside)
-        //        button.isHighlighted = true
+        button.setImage(UIImage(named: "Heart"), for: .normal)
+        button.addTarget(self, action: #selector(tappedLikeButton(sender:)), for: .touchUpInside)
         return button
     }()
     
-    weak var openCharacterScreenDelegate: OpenCharacterScreenDelegate? // свойство типа делегата (хз что это такое, не переменная )
+    weak var openCharacterScreenDelegate: OpenCharacterScreenDelegate?
+    weak var reloadCollectionDelegate: ReloadCollectionDelegate?
     
-    private var personage: Personages?
-    
+    private var renderedEpisode: RenderedEpisode?
     
     private func setupCell() {
         [characterImageView, nameTextLabel, episodeFieldView, playImageView, episodeTextLabel, likeButton].forEach{
@@ -77,34 +72,34 @@ class EpisodeCollectionViewCell: UICollectionViewCell {
         
         self.layer.cornerRadius = 4
         self.clipsToBounds = true
-        
     }
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             characterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             characterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             characterImageView.heightAnchor.constraint(equalToConstant: 232),
-            //            characterImageView.widthAnchor.constraint(equalToConstant: 311),
             
-            nameTextLabel.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: 16),
+            nameTextLabel.topAnchor.constraint(equalTo: characterImageView.bottomAnchor),
             nameTextLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nameTextLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            nameTextLabel.heightAnchor.constraint(equalToConstant: 54),
+            nameTextLabel.bottomAnchor.constraint(equalTo: episodeFieldView.topAnchor),
             
             episodeFieldView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             episodeFieldView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             episodeFieldView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             episodeFieldView.heightAnchor.constraint(equalToConstant: 71),
             
-            playImageView.topAnchor.constraint(equalTo: episodeFieldView.topAnchor, constant: 21.92),
+            playImageView.centerYAnchor.constraint(equalTo: episodeFieldView.centerYAnchor),
             playImageView.leadingAnchor.constraint(equalTo: episodeFieldView.leadingAnchor, constant: 21.92),
             playImageView.heightAnchor.constraint(equalToConstant: 34.08),
             playImageView.widthAnchor.constraint(equalToConstant: 32.88),
             
+            episodeTextLabel.topAnchor.constraint(equalTo: episodeFieldView.topAnchor),
             episodeTextLabel.leadingAnchor.constraint(equalTo: episodeFieldView.leadingAnchor,constant: 65.76),
-            episodeTextLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 314.4),
             episodeTextLabel.trailingAnchor.constraint(equalTo: likeButton.leadingAnchor, constant: -4),
+            episodeTextLabel.bottomAnchor.constraint(equalTo: episodeFieldView.bottomAnchor),
             
             likeButton.centerYAnchor.constraint(equalTo: episodeFieldView.centerYAnchor),
             likeButton.trailingAnchor.constraint(equalTo: episodeFieldView.trailingAnchor, constant: -25),
@@ -113,50 +108,64 @@ class EpisodeCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(episode: Episodes, personage: Personages, delegate: OpenCharacterScreenDelegate) {
+    func configure(episode: RenderedEpisode, moveDelegate: OpenCharacterScreenDelegate, reloadDelegate: ReloadCollectionDelegate?) {
+        
         setupCell()
         setupConstraints()
-        
+        openCharacterScreenDelegate = moveDelegate
+        reloadCollectionDelegate = reloadDelegate
+        renderedEpisode = episode
         episodeTextLabel.text = "\(episode.name) | \(episode.episode)"
-        openCharacterScreenDelegate = delegate
-        nameTextLabel.text = personage.name
-        self.personage = personage
+        nameTextLabel.text = episode.character.name
         
-        guard let imageURL = URL(string: personage.image ?? "") else { return }
+        guard let imageURL = URL(string: episode.character.image) else { return }
         characterImageView.load(url: imageURL)
         
-    }
-    
-    @objc func tappedMe(sender: UIButton) {
-        likeButton.tintColor = .red
-        rotateView(targetView: likeButton, duration: 1)
-        
-        
-        //        likeButton.isHighlighted.toggle()
-        //        switch likeButton.isHighlighted {
-        //        case true:
-        //            likeButton.tintColor = .systemMint
-        //            likeButton.isHighlighted = false
-        //
-        //        case false:
-        //            likeButton.tintColor = .green
-        //            likeButton.isHighlighted = true
-        //        }
-        
-    }
-    
-    @objc func tappedImage(sender: UITapGestureRecognizer) {
-        guard let personage = personage else { return }
-        openCharacterScreenDelegate?.openCharacterScreen(personage: personage)
-        
-    }
-    
-    private func rotateView(targetView: UIView, duration: Double) {
-        UIView.animate(withDuration: duration, delay: 0.0, options: .curveLinear, animations: {
-            targetView.transform = targetView.transform.scaledBy(x: 100, y: 100)
-        }) { finished in
-            self.rotateView(targetView: targetView, duration: duration)
+        if FavouriteEpisodes.shared.getEpisodeOut().contains(where: { favouriteEpisode in
+            favouriteEpisode.id == episode.id
+        }){
+            likeButton.setImage(UIImage(named: "red heart"), for: .normal)
+            renderedEpisode?.isFavourite = true
+        } else {
+            likeButton.setImage(UIImage(named: "Heart"), for: .normal)
+            renderedEpisode?.isFavourite = false
         }
     }
     
+    @objc func tappedLikeButton(sender: UIButton) {
+        guard let renderedEpisode = renderedEpisode else { return }
+        DispatchQueue.main.async {
+            if FavouriteEpisodes.shared.getEpisodeOut().contains(where: { favouriteEpisode in
+                favouriteEpisode.id == renderedEpisode.id
+            }) {
+                self.likeButton.setImage(UIImage(named: "Heart"), for: .normal)
+                FavouriteEpisodes.shared.removeEpisode(episode: renderedEpisode)
+                self.reloadCollectionDelegate?.reload()
+            } else {
+                self.likeButton.setImage(UIImage(named: "red heart"), for: .normal)
+                FavouriteEpisodes.shared.saveEpisodeIn(episode: renderedEpisode)
+                self.reloadCollectionDelegate?.reload()
+            }
+            self.reloadCollectionDelegate?.reload()
+        }
+        
+        sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        UIView.animate(withDuration: 2.0,
+                       delay: 0,
+                       usingSpringWithDamping: CGFloat(0.20),
+                       initialSpringVelocity: CGFloat(6.0),
+                       options: UIView.AnimationOptions.allowUserInteraction,
+                       animations: {
+            sender.transform = CGAffineTransform.identity
+        },
+                       completion: { Void in()  }
+        )
+    }
+    
+    @objc func tappedImage(sender: UITapGestureRecognizer) {
+        guard let personage = renderedEpisode?.character else { return }
+        openCharacterScreenDelegate?.openCharacterScreen(personage: personage)
+    }
 }
+
+

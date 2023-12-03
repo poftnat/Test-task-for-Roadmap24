@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Photos
 
-class CharacterViewController: UIViewController {
+final class CharacterViewController: UIViewController, UINavigationControllerDelegate {
     
     private var inputPersonageData: Personages
     
@@ -30,6 +31,7 @@ class CharacterViewController: UIViewController {
         button.setBackgroundImage(image, for: .normal)
         button.tintColor = .gray
         button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(changePhotoAction), for: .touchUpInside)
         return button
     }()
     
@@ -37,13 +39,14 @@ class CharacterViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: "Roboto", size: 32)
         label.text = inputPersonageData.name
+        label.textAlignment = .center
         return label
     }()
     
     private lazy var headlinerTextLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Roboto", size: 28)
-        label.textColor = .lightGray
+        label.font = UIFont(name: "Roboto-Bold", size: 20)
+        label.textColor = UIColor(red: 0.56, green: 0.56, blue: 0.58, alpha: 1.00)
         label.text = "Informations:"
         return label
     }()
@@ -60,10 +63,10 @@ class CharacterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-
+        createCustomNavBar()
     }
+    
     func setupUI() {
-        
         characterProperties = [
                PairProperties(propertyType: "Gender", property: inputPersonageData.gender),
                PairProperties(propertyType: "Status", property: inputPersonageData.status),
@@ -79,7 +82,6 @@ class CharacterViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
         
         tableView.rowHeight = 55
         tableView.estimatedRowHeight = 100
@@ -88,16 +90,13 @@ class CharacterViewController: UIViewController {
 
         tableView.dataSource = self
         
+        tableView.register(CharacterTableViewCell.self, forCellReuseIdentifier: "CharacterTableViewCell")
+        
         guard let imageURL = URL(string: inputPersonageData.image) else { return }
         characterImage.load(url: imageURL)
         
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 410),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            characterImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 124),
+            characterImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 130),
             characterImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             characterImage.heightAnchor.constraint(equalToConstant: 148),
             characterImage.widthAnchor.constraint(equalToConstant: 147),
@@ -107,16 +106,48 @@ class CharacterViewController: UIViewController {
             photoButton.heightAnchor.constraint(equalToConstant: 32),
             photoButton.widthAnchor.constraint(equalToConstant: 40),
             
+            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            nameLabel.topAnchor.constraint(equalTo: characterImage.bottomAnchor, constant: 40),
+            nameLabel.heightAnchor.constraint(equalToConstant: 35),
+            nameLabel.widthAnchor.constraint(equalToConstant: 314.6),
+            
+            headlinerTextLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 15),
             headlinerTextLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
             headlinerTextLabel.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            headlinerTextLabel.heightAnchor.constraint(equalToConstant: 30),
             
-            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 319.59),
-            nameLabel.heightAnchor.constraint(equalToConstant: 32.39),
-            nameLabel.widthAnchor.constraint(equalToConstant: 314.6)
+            tableView.topAnchor.constraint(equalTo: headlinerTextLabel.bottomAnchor, constant: 4),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
         ])
+    }
+    @objc func goBack() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func changePhotoAction() {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let chooseFromGalleryAction = UIAlertAction(title: "Выбрать из галереи", style: .default) { action in
+            self.showImagePicker(sourceType: .photoLibrary) }
+        actionSheet.addAction(chooseFromGalleryAction)
+        
+        let takePhotoAction = UIAlertAction(title: "Сделать фото", style: .default) { action in
+            self.showImagePicker(sourceType: .camera) }
+        actionSheet.addAction(takePhotoAction)
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        actionSheet.addAction(cancelAction)
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    func showImagePicker(sourceType: UIImagePickerController.SourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
     }
 }
 
@@ -129,5 +160,18 @@ extension CharacterViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterTableViewCell", for: indexPath) as? CharacterTableViewCell, let characterProperties = characterProperties else { return UITableViewCell() }
         cell.configure(data: characterProperties[indexPath.row])
         return cell
+    }
+}
+
+extension CharacterViewController: UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let selectedImage = info[.originalImage] as? UIImage {
+            characterImage.image = selectedImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
 }
